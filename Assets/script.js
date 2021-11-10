@@ -1,186 +1,220 @@
+// var quizBody = document.getElementById("quiz");
 
-var win = document.querySelector(".win");
-var lose = document.querySelector(".lose");
-var timerElement = document.querySelector(".timer-count");
-var startButton = document.querySelector(".start-button");
+var finalScoreEl = document.getElementById("finalScore");
+var quizEndedDiv = document.getElementById("quizEnded");
 
+var quizTimer = document.getElementById("timer");
+var startQuizButton = document.getElementById("startBtn");
+var startQuizDiv = document.getElementById("startpage");
+var highscoreContainer = document.getElementById("highscoreContainer");
+var highscoreDiv = document.getElementById("high-scorePage");
+var highscoreInputName = document.getElementById("initials");
+var highscoreDisplayName = document.getElementById("highscore-initials");
+var endGameBtns = document.getElementById("endGameBtns");
+var submitScoreBtn = document.getElementById("submitScore");
+var highscoreDisplayScore = document.getElementById("highscore-score");
 
+// Prompt Questions
+var buttonA = document.getElementById("a");
+var buttonB = document.getElementById("b");
+var buttonC = document.getElementById("c");
+var buttonD = document.getElementById("d");
 
-var winCounter = 0;
-var loseCounter = 0;
-var isWin = false;
-var timer;
-var timerCount;
-(function(){
-  function buildQuiz(){
-    // variable to store the HTML output
-    const output = [];
+var quizBody = document.getElementById("quiz");
+var questionsEl = document.getElementById("questions");
+var quizQuestions = [
+  {
+    question: "What does CSS stand for?",
+    optionA: "Cascading Style Studio",
+    optionB: "Cresting Style Sheets",
+    optionC: "Caligraphy Standard Style",
+    optionD: "Cascading Style Sheets",
+    correctAnswer: "d",
+  },
+  {
+    question: "What is NOT a main language of Web Development?",
+    optionA: "Microsoft",
+    optionB: "JavaScript",
+    optionC: "CSS",
+    optionD: "HTML",
+    correctAnswer: "a",
+  },
+  {
+    question: "Can you build a responsive quiz with just HTML & CSS?",
+    optionA: "Yes, always",
+    optionB: "No, never",
+    optionC: "It depends on web builder",
+    optionD: "Only when using HTML & CSS together",
+    correctAnswer: "b",
+  },
+  {
+    question: "JavaScript is a case senstive language?",
+    optionA: "It depends on how it is used",
+    optionB: "It is not a language",
+    optionC: "True",
+    optionD: "False",
+    correctAnswer: "c",
+  },
+  {
+    question: "What does HTML stand for?",
+    optionA: "HyperText Marketing Language",
+    optionB: "HighTime Markup Language",
+    optionC: "HeroText Markdown Language",
+    optionD: "None of the above",
+    correctAnswer: "d",
+  },
+];
 
-    // for each question...
-    myQuestions.forEach(
-      (currentQuestion, questionNumber) => {
+// Score
+var quizTimer = document.getElementById("timer");
+var finalQuestionIndex = quizQuestions.length;
+var currentQuestionIndex = 0;
+var timeLeft = 40;
+var timerInterval;
+var score = 0;
+var correct;
 
-        // variable to store the list of possible answers
-        const answers = [];
-
-        // and for each available answer...
-        for(letter in currentQuestion.answers){
-
-          // ...add an HTML radio button
-          answers.push(
-            `<label>
-              <input type="radio" name="question${questionNumber}" value="${letter}">
-              ${letter} :
-              ${currentQuestion.answers[letter]}
-            </label>`
-          );
-        }
-
-        // add this question and its answers to the output
-        output.push(
-          `<div class="question"> ${currentQuestion.question} </div>
-          <div class="answers"> ${answers.join('')} </div>`
-        );
-      }
-    );
-
-    // finally combine our output list into one string of HTML and put it on the page
-    quizContainer.innerHTML = output.join('');
+function generateQuizQuestion() {
+  quizEndedDiv.style.display = "none";
+  if (currentQuestionIndex === finalQuestionIndex) {
+    return showScore();
   }
+  var currentQuestion = quizQuestions[currentQuestionIndex];
+  questionsEl.innerHTML = "<p>" + currentQuestion.question + "</p>";
+  buttonA.innerHTML = currentQuestion.optionA;
+  buttonB.innerHTML = currentQuestion.optionB;
+  buttonC.innerHTML = currentQuestion.optionC;
+  buttonD.innerHTML = currentQuestion.optionD;
+}
 
-  function showResults(){
+// Start Quiz
+function startQuiz() {
+  quizEndedDiv.style.display = "none";
+  startQuizDiv.style.display = "none";
+  generateQuizQuestion();
 
-    // gather answer containers from our quiz
-    const answerContainers = quizContainer.querySelectorAll('.answers');
+  // Timer
+  timerInterval = setInterval(function () {
+    timeLeft--;
+    quizTimer.textContent = "Time left: " + timeLeft;
 
-    // keep track of user's answers
-    let numCorrect = 0;
-
-    // for each question...
-    myQuestions.forEach( (currentQuestion, questionNumber) => {
-
-      // find selected answer
-      const answerContainer = answerContainers[questionNumber];
-      const selector = `input[name=question${questionNumber}]:checked`;
-      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-
-      // if answer is correct
-      if(userAnswer === currentQuestion.correctAnswer){
-        // add to the number of correct answers
-        numCorrect++;
-
-        // color the answers green
-        answerContainers[questionNumber].style.color = 'lightgreen';
-      }
-      // if answer is wrong or blank
-      else{
-        // color the answers red
-        answerContainers[questionNumber].style.color = 'red';
-      }
-    });
-
-    // show number of correct answers out of total
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
-  }
-
-  const quizContainer = document.getElementById('quiz');
-  const resultsContainer = document.getElementById('results');
-  const submitButton = document.getElementById('submit');
-  const myQuestions = [
-    {
-      question: "Who invented JavaScript?",
-      answers: {
-        a: "Douglas Crockford",
-        b: "Sheryl Sandberg",
-        c: "Brendan Eich"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which one of these is a JavaScript package manager?",
-      answers: {
-        a: "Node.js",
-        b: "TypeScript",
-        c: "npm"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which tool can you use to ensure code quality?",
-      answers: {
-        a: "Angular",
-        b: "jQuery",
-        c: "RequireJS",
-        d: "ESLint"
-      },
-      correctAnswer: "d"
+    if (timeLeft === 0) {
+      clearInterval(timerInterval);
+      showScore();
     }
-  ];
+  }, 1000);
+  quizBody.style.display = "block";
+}
 
-  // Kick things off
-  buildQuiz();
-
-  // Event listeners
-  submitButton.addEventListener('click', showResults);
-})();
-
-
-
-
-
-
-
-// The init function is called when the page loads 
-function init() {
-    getWins();
-    getlosses();
+function selectAnswer(userAnswer) {
+  if (userAnswer === quizQuestions[questionNumber].correct) {
+    instantResult.textContent = "Correct!";
+    userScore++;
+  } else {
+    timeLeft -= -10;
+    instantResult.textContent = "Wrong!";
   }
-  
-  // The startGame function is called when the start button is clicked
-  function startGame() {
-    isWin = false;
-    timerCount = 10;
-    // Prevents start button from being clicked when round is in progress
-    startButton.disabled = true;
-    renderBlanks()
-    startTimer()
+  setTimeout(function () {
+    questionNumber++;
+    if (quizQuestions.length > questionNumber) {
+      getQuestion();
+    } else {
+      quizEnd();
+    }
+  }, 1000);
+}
+
+var resultsEl = document.getElementById("result");
+function showScore() {
+  quizBody.style.display = "none";
+  quizEndedDiv.style.display = "flex";
+  clearInterval(timerInterval);
+  highscoreInputName.value = "";
+  finalScoreEl.innerHTML =
+    "You got " + score + " out of " + quizQuestions.length + " correct!";
+}
+
+submitScoreBtn.addEventListener("click", function highscore() {
+  if (highscoreInputName.value === "") {
+    alert("Please Enter Initials (REQUIRED)");
+    return false;
+  } else {
+    var savedHighscores =
+      JSON.parse(localStorage.getItem("savedHighscores")) || [];
+    var currentUser = highscoreInputName.value.trim();
+    var currentHighscore = {
+      name: currentUser,
+      score: score,
+    };
+
+    quizEndedDiv.style.display = "none";
+    highscoreContainer.style.display = "flex";
+    highscoreDiv.style.display = "block";
+    endGameBtns.style.display = "flex";
+
+    savedHighscores.push(currentHighscore);
+    localStorage.setItem("savedHighscores", JSON.stringify(savedHighscores));
+    generateHighscores();
   }
-  
-  // The winGame function is called when the win condition is met
-  function winGame() {
-    wordBlank.textContent = "YOU WON!!!🏆 ";
-    winCounter++
-    startButton.disabled = false;
-    setWins()
+});
+
+function generateHighscores() {
+  highscoreDisplayName.innerHTML = "";
+  highscoreDisplayScore.innerHTML = "";
+  var highscores = JSON.parse(localStorage.getItem("savedHighscores")) || [];
+  for (i = 0; i < highscores.length; i++) {
+    var newNameSpan = document.createElement("li");
+    var newScoreSpan = document.createElement("li");
+    newNameSpan.textContent = highscores[i].name;
+    newScoreSpan.textContent = highscores[i].score;
+    highscoreDisplayName.appendChild(newNameSpan);
+    highscoreDisplayScore.appendChild(newScoreSpan);
   }
-  
-  // The loseGame function is called when timer reaches 0
-  function loseGame() {
-    wordBlank.textContent = "GAME OVER";
-    loseCounter++
-    startButton.disabled = false;
-    setLosses()
+}
+
+function showHighscore() {
+  startQuizDiv.style.display = "none";
+  quizEndedDiv.style.display = "none";
+  highscoreContainer.style.display = "flex";
+  highscoreDiv.style.display = "block";
+  endGameBtns.style.display = "flex";
+
+  generateHighscores();
+}
+
+function clearScore() {
+  window.localStorage.clear();
+  highscoreDisplayName.textContent = "";
+  highscoreDisplayScore.textContent = "";
+}
+
+function replayQuiz() {
+  highscoreContainer.style.display = "none";
+  quizEndedDiv.style.display = "none";
+  startQuizDiv.style.display = "flex";
+  timeLeft = 40;
+  score = 0;
+  currentQuestionIndex = 0;
+}
+
+function checkAnswer(answer) {
+  correct = quizQuestions[currentQuestionIndex].correctAnswer;
+
+  if (answer === correct && currentQuestionIndex !== finalQuestionIndex) {
+    score++;
+    alert("Correct!");
+    currentQuestionIndex++;
+    generateQuizQuestion();
+  } else if (
+    answer !== correct &&
+    currentQuestionIndex !== finalQuestionIndex
+  ) {
+    alert("Incorrect");
+    currentQuestionIndex++;
+    generateQuizQuestion();
+  } else {
+    showScore();
   }
-  
-  // The setTimer function starts and stops the timer and triggers winGame() and loseGame()
-  function startTimer() {
-    // Sets timer
-    timer = setInterval(function() {
-      timerCount--;
-      timerElement.textContent = timerCount;
-      if (timerCount >= 0) {
-        // Tests if win condition is met
-        if (isWin && timerCount > 0) {
-          // Clears interval and stops timer
-          clearInterval(timer);
-          winGame();
-        }
-      }
-      // Tests if time has run out
-      if (timerCount === 0) {
-        // Clears interval
-        clearInterval(timer);
-        loseGame();
-      }
-    }, 1000);
-  }
+}
+
+startQuizButton.addEventListener("click", startQuiz);

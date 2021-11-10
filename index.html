@@ -1,53 +1,86 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>CSS Box Styling</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
-  </head>
-  <body>
-    <header>
-      <div class= "large-font">Coding Quiz Game</div>
-      <button class="start-button">Start</button>
-    </header>
-    <h1>Quiz on Important Facts</h1>
-    <div class="quiz-container">
-      <div id="quiz"></div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Assets/style.css">
+    <title>Coding Quiz</title>
+</head>
+<body>
+    <main>
+        <!-- Greeting and Start Button -->
+    <div class="container" id="startpage">
+
+        <div id="startQuiz">
+        <h1>Timed Coding Quiz</h1>
+        <br>
+        <h2>Test your knowledge of HTML, CSS and JavaScript!</div>
+            <br>
+            <h2>Think Fast!!</h2>
+            <br>
+        <button id="startBtn">
+            <a>Begin Quiz</a>
+        </button>
+        
+        </div>
+
+    <div class="container">
+        <!-- Quiz -->
+    <div id="quiz">
+        <!-- Timer -->
+        <div id="timer"> <h2> Time Remaining: </h2> </div>
+
+        <!-- Questions -->
+        <div id="questions"></div>
+            <button id="a" onclick="checkAnswer('a')"></button>
+            <button id="b" onclick="checkAnswer('b')"></button>
+            <button id="c" onclick="checkAnswer('c')"></button>
+            <button id="d" onclick="checkAnswer('d')"></button>
+        <br>
+        <br>
+        <!-- Results -->
+        <div id="result"> </div>
     </div>
-    <button id="previous">Previous Question</button>
-    <button id="next">Next Question</button>
-    
-    <div id="results"></div>
 
+        <!-- Quiz Ends -->
+        <div id="quizEnded"></div>
+        <!-- Final Score -->
+        <div id="finalScore"></div>
+        <input type="text" size = "50" placeholder="Enter Your Initials for the High Score" id="initials" name="initials"/>
+        <button id="submitScore">Submit Score</button>
+        
 
+    <!-- High Score -->
+    <div id="highscoreContainer">
 
+        <div id="high-scorePage">
+            <div id="highscore-header">
+        <div id="highScore">
+        <h2> Player Initials: </h2>
+        <h2> Score: </h2>
+            </div>
+        </div>
+        </div>
 
-
-
-
-
-</section>
-
-<section>
-  <div class="card results">
-    <div class = "win-loss-container">
-    <div>
-    <h2>Wins: <span class="win">0 </span> </h2>
-    <h2>Losses: <span class="lose">0</span></h2>
-  </div>
-    <button class="reset-button">Reset Score</button>
-</div>
-    <div class= "card timer">
-      <div class = "timer-text">
-      <div class="large-font timer-count">10</div>
-      <h3>seconds remaining</h3>
+        <div id = "highscore-initials">
+        <div id = "highscore-score">
+        </div>
+        </div>
+        <div id="endGameBtns">
+        <button id="replay" onclick="replayQuiz()">Play Again</button>
+        <button id="clearHighscore" onclick="clearScore()">Clear Highscores</button>
+        </div>
     </div>
-  
+
+
+
     </div>
-  </div>
-</section>
-</main>
-<script src="assets/js/script.js"></script>
+
+    </div>
+
+    </main>
+
+        <script src="Assets/script.js" type="text/javascript"></script> 
 </body>
 </html>
