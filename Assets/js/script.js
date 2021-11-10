@@ -64,7 +64,7 @@ function init() {
           winGame();
         }
       }
-      // Tests if time has run out
+      // Tests if time count is out 
       if (timerCount === 0) {
         // Clears interval
         clearInterval(timer);
