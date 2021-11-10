@@ -1,11 +1,8 @@
 :root {
-  background-color: linear-gradient(
-    0deg,
-    rgba(19, 41, 61, 1) 0%,
-    rgba(237, 245, 249, 1) 63%
+  background-color: (whitesmoke
   );
   --primary-color: dark blue;
-  --secondary-color: rgb(0, 255, 42);
+  --secondary-color: rgb(25, 0, 255);
   --tertiary-color: rgb(177, 12, 12);
 }
 
