@@ -1,9 +1,9 @@
 :root {
   background-color: (whitesmoke
   );
-  --primary-color: dark blue;
+  --primary-color: dark rgb(0, 255, 34);
   --secondary-color: rgb(25, 0, 255);
-  --tertiary-color: rgb(177, 12, 12);
+  --tertiary-color: rgb(12, 177, 34);
 }
 
 h1 {
